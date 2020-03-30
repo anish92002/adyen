@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Adyen Checkout Components sample code</title>
+    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.5.0/adyen.css">
+    <link rel="stylesheet" href="../demo.css">
+</head>
+<body>
+    <div class="container container--full-width">
+        <div class="main">
+            <div class="checkout-container">
+                <a href="../">Back</a>
+
+                <h1>Please Select Your Payment Method</h1> 
+                <div class="payment-method">
+                    <div id="giropay"></div>
+                    <div id="dropin-container">
+                        <!-- Drop-in will be rendered here -->
+                    </div>
+                    <button> Click here for additional payments </button>
+                </div>
+            </div>
+
+            <div class="info">
+                <p>
+                  Thanks for shopping with us today!!! 
+                </p>
+                <p>
+                  <!-- To make a payment, use our <a href="https://docs.adyen.com/developers/development-resources/test-cards/test-card-numbers" target="_blank">test card numbers</a>. -->
+                </p>
+                <p>
+                  <!-- For more information, please refer to the <a href="https://docs.adyen.com/checkout/drop-in-web/" target="_blank">Drop-in documentation</a>.  -->
+                </p>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="header">
+                <h2>Basic Implementation</h2>
+                <button class="copy-sample-code" aria-label="Copy sample code"></button>
+            </div>
+            <pre class="source-code"><code> 
+                
+    const checkout = new AdyenCheckout({            
+    locale: "en-US",           
+    environment: 'test',
+    originKey: originKey,
+    paymentMethodsResponse: paymentMethodsResponse,
+});
+
+ const dropin = checkout
+    .create('dropin', {
+            onSubmit: (state, dropin) => {
+                makePayment(state.data)
+                  // Your function calling your server to make the /payments request
+                  .then(action => {
+                    dropin.setStatus('success', { message: 'Payment successful!' });
+                    // Drop-in handles the action object from the /payments response
+                  })
+                  .catch(error => {
+                    throw Error(error);
+                  });
+              },
+        }
+    })
+    .mount('#dropin-container');
+
+</code></pre>
+            <div class="header">
+                <h2>Current state</h2>
+            </div>
+            <pre class="current-state">{}</pre>
+
+            <div class="request-container">
+                <div class="header">
+                    <h2>Request</h2>
+                </div>
+                <p>The request to the <code>/payments</code> endpoint will be shown here.</p>
+                <pre class="request-code"></pre>
+            </div>
+
+            <div class="response-container">
+                <div class="header">
+                    <h2>Response</h2>
+                </div>
+                <p>The response from the <code>/payments</code> endpoint will be shown here.</p>
+                <pre class="response-code"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://pay.google.com/gp/p/js/pay.js"></script>
+    <script src="https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.4.0/adyen.js"></script>    
+    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/3.5.0/adyen.js"></script>
+    <script src="../demo.js"></script>
+    <script src="../utils.js"></script>
+    <script src="/dropin/dropin.js"></script>
+</body>
+</html>
